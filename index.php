@@ -1,13 +1,12 @@
 <?php
-session_start();
 
-include('env.php');
+include('database.php');
 
-$db = new mysqli($host,$dbuser,$dbpass,$dbname);
-
-
-if ($db->connect_error) {
-    die("Connection failed: " . $db->connect_error);
+if(!empty($uname)){
+    
+}
+else{
+    header('location: login.php');
 }
 
 
@@ -320,7 +319,7 @@ if ($db->connect_error) {
                         </div>
                         <div class="dropdown dib">
                             <div class="header-icon" data-toggle="dropdown">
-                                <span class="user-avatar">John
+                                <span class="user-avatar"><?php if(!empty($fullname)){echo $fullname;}?>
                                     <i class="ti-angle-down f-s-10"></i>
                                 </span>
                                 <div class="drop-down dropdown-profile dropdown-menu dropdown-menu-right">

@@ -1,3 +1,43 @@
+<?php
+
+include('database.php');
+
+if(isset($_POST['submit'])){
+    $username = $_POST['email'];
+    $password = md5($_POST['password']);
+
+    if(!empty($username) && !empty($password)){
+        $loginquery = "SELECT * FROM `user` WHERE `email` = '$username' AND `password` = '$password'";
+
+        $result = $db->query($loginquery);
+
+        $count = mysqli_num_rows($result);
+
+        if($count > 0){
+            while($row = $result->fetch_assoc()){
+                $username = $row['username'];
+                $fullname = $row['fullname'];
+                $email = $row['email'];
+                $mobile = $row['mobile'];
+            }
+            $_SESSION['username'] = $username;
+            $_SESSION['fullname'] = $fullname;
+            $_SESSION['email'] = $email;
+            $_SESSION['mobile'] = $mobile;
+            header('location: index.php');
+            exit();
+        }
+        else{
+            $error = "Username or Password is not correct";
+        }
+    }
+    else{
+        $error = "Fields are required";
+    }
+}
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,25 +80,23 @@
                         </div>
                         <div class="login-form">
                             <h4>Administratior Login</h4>
-                            <form>
+                            <form method="post" action="">
                                 <div class="form-group">
                                     <label>Email address</label>
-                                    <input type="email" class="form-control" placeholder="Email">
+                                    <input name="email" type="email" class="form-control" placeholder="Email" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Password</label>
-                                    <input type="password" class="form-control" placeholder="Password">
+                                    <input name="password" type="password" class="form-control" placeholder="Password" required>
                                 </div>
                                 <div class="checkbox">
-                                    <label>
-										<input type="checkbox"> Remember Me
-									</label>
+                                    
                                     <label class="pull-right">
 										<a href="#">Forgotten Password?</a>
 									</label>
 
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30">Sign in</button>
+                                <button name="submit" type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30">Sign in</button>
                                 <div class="social-login-content">
                                     <div class="social-button">
                                         <button type="button" class="btn btn-primary bg-facebook btn-flat btn-addon m-b-10"><i class="ti-facebook"></i>Sign in with facebook</button>
